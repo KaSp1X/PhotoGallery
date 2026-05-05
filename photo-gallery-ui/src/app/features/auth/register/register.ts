@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -23,7 +23,7 @@ export class Register {
     password: ['', [Validators.required, Validators.minLength(8)]]
   });;
 
-  constructor(private readonly authService: Auth, private readonly router: Router) { }
+  constructor(private readonly authService: Auth, private readonly router: Router, private readonly changeDetector: ChangeDetectorRef) { }
 
   onSubmit(): void {
     if (this.form.invalid) {
@@ -41,6 +41,7 @@ export class Register {
       error: () => {
         this.errorMessage = 'Registration failed';
         this.isLoading = false;
+        this.changeDetector.markForCheck();
       }
     });
   }

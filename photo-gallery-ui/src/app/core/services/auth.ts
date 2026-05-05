@@ -58,6 +58,10 @@ export class Auth {
     return Array.isArray(roles) ? roles : [roles];
   }
 
+  isAdmin(): boolean {
+    return this.getUserRoles().includes('Admin');
+  }
+
   private hasToken(): boolean {
     return !!localStorage.getItem(this.tokenKey);
   }

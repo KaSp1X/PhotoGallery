@@ -15,9 +15,14 @@
         <p class="card-text text-muted">
           By {{ album.ownerUserName }}
         </p>
-        <a [routerLink]="['/albums', album.id]" class="btn btn-primary">
-          Open Album
-        </a>
+        <div class="d-flex gap-2">
+          <a [routerLink]="['/albums', album.id]" class="btn btn-primary">
+            Open Album
+          </a>
+          <button *ngIf="isAdmin" class="btn btn-danger" (click)="deleteAlbum(album.id)">
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   </div>

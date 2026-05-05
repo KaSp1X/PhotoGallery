@@ -1,6 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" routerLink="/">Photo Gallery</a>
+    <div class="d-flex align-items-center">
+      <a class="navbar-brand me-2" routerLink="/">
+        Photo Gallery
+      </a>
+      <span *ngIf="isAdmin" class="badge bg-danger">
+        Admin
+      </span>
+    </div>
     <div class="navbar-nav me-auto">
       <a class="nav-link" routerLink="/">Albums</a>
       <a *ngIf="isAuthenticated" class="nav-link" routerLink="/my-albums">My Albums</a>

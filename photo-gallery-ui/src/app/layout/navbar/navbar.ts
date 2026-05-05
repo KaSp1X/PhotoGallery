@@ -13,9 +13,13 @@ import { Auth } from '../../core/services/auth';
 })
 export class Navbar {
   isAuthenticated = false;
+  isAdmin = false;
 
   constructor(public authService: Auth, private router: Router) {
-    this.authService.isAuthenticated$.subscribe(value => { this.isAuthenticated = value; });
+    this.authService.isAuthenticated$.subscribe(value => {
+      this.isAuthenticated = value;
+      this.isAdmin = this.authService.isAdmin();
+    });
   }
 
   logout(): void {

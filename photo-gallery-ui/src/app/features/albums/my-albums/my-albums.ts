@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -25,7 +25,7 @@ export class MyAlbums implements OnInit {
     title: ['', Validators.required]
   });
 
-  constructor(private readonly albumsService: Albums) { }
+  constructor(private readonly albumsService: Albums, private readonly changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.loadAlbums();
@@ -38,6 +38,7 @@ export class MyAlbums implements OnInit {
       this.currentPage = result.page;
       this.totalPages = result.totalPages;
       this.isLoading = false;
+      this.changeDetector.markForCheck();
     });
   }
 
