@@ -1,1 +1,51 @@
-<p>album-details works!</p>
+<h2 class="mb-4">Album Images</h2>
+
+<div *ngIf="isAuthenticated" class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <input type="file" class="form-control" (change)="onFileSelected($event)">
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-success w-100" (click)="uploadImage()">Upload Image</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isLoading" class="text-center">Loading...</div>
+<div class="row">
+  <div class="col-md-4 mb-4" *ngFor="let image of images">
+    <div class="card shadow-sm">
+      <img [src]="image.thumbnailPath" class="card-img-top" (click)="openImage(image.imagePath)">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            + {{ image.likes }}
+            - {{ image.dislikes }}
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button *ngIf="isAuthenticated" class="btn btn-outline-success" (click)="likeImage(image.id)">Like</button>
+          <button *ngIf="isAuthenticated" class="btn btn-outline-danger" (click)="dislikeImage(image.id)">Dislike</button>
+          <button *ngIf="isAuthenticated" class="btn btn-danger" (click)="deleteImage(image.id)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChanged)="loadImages($event)"></app-pagination>
+
+
+<div *ngIf="selectedImage" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.8);">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <img [src]="selectedImage" class="img-fluid">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

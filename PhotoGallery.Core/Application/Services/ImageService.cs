@@ -153,8 +153,8 @@ namespace PhotoGallery.Core.Application.Services
         private static ImageDto MapImage(Image image) => new()
         {
             Id = image.Id,
-            ImagePath = image.ImagePath,
-            ThumbnailPath = image.ThumbnailPath,
+            ImagePath = $"https://localhost:7082{image.ImagePath}",
+            ThumbnailPath = $"https://localhost:7082{image.ThumbnailPath}",
             Likes = image.Likes,
             Dislikes = image.Dislikes
         };
