@@ -1,4 +1,4 @@
-﻿namespace PhotoGallery.Core.Application.DTOs
+﻿namespace PhotoGallery.Core.Application.DTOs.Auth
 {
     public class RegisterDto
     {

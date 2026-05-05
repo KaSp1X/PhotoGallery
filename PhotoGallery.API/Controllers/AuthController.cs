@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PhotoGallery.Core.Application.DTOs;
+using PhotoGallery.Core.Application.DTOs.Auth;
 using PhotoGallery.Core.Application.Interfaces;
 using PhotoGallery.Core.Domain.Entities;
 
