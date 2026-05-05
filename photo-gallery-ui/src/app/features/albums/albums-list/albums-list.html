@@ -1,1 +1,26 @@
-<p>albums-list works!</p>
+<h2 class="mb-4">Albums</h2>
+
+<div *ngIf="isLoading" class="text-center">
+  Loading...
+</div>
+
+<div class="row">
+  <div class="col-md-4 mb-4" *ngFor="let album of albums">
+    <div class="card h-100 shadow-sm">
+      <img *ngIf="album.coverImagePath" [src]="album.coverImagePath" class="card-img-top" style="height: 250px; object-fit: cover;">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ album.title }}
+        </h5>
+        <p class="card-text text-muted">
+          By {{ album.ownerUserName }}
+        </p>
+        <a [routerLink]="['/albums', album.id]" class="btn btn-primary">
+          Open Album
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChanged)="loadAlbums($event)"></app-pagination>

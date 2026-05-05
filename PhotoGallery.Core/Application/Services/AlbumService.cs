@@ -97,7 +97,9 @@ namespace PhotoGallery.Core.Application.Services
             Title = album.Title,
             CreatedAt = album.CreatedAt,
             OwnerUserName = album.User.UserName!,
-            CoverImagePath = album.Images.FirstOrDefault()?.ThumbnailPath
+            CoverImagePath = album.Images.FirstOrDefault() != null
+                             ? $"https://localhost:7082{album.Images.First().ThumbnailPath}"
+                             : null
         };
 
         private static PagedResult<AlbumDto> MapPagedResult(PagedResult<Album> result) => new()

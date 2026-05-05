@@ -1,1 +1,35 @@
-<p>my-albums works!</p>
+<h2 class="mb-4">My Albums</h2>
+
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="createAlbum()">
+      <div class="row">
+        <div class="col-md-9">
+          <input type="text" class="form-control" placeholder="Album title" formControlName="title">
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-success w-100">
+            Create Album
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 mb-4" *ngFor="let album of albums">
+    <div class="card h-100 shadow-sm">
+      <img *ngIf="album.coverImagePath" [src]="album.coverImagePath" class="card-img-top" style="height: 250px; object-fit: cover;">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ album.title }}
+        </h5>
+        <a [routerLink]="['/albums', album.id]" class="btn btn-primary me-2">Open</a>
+        <button class="btn btn-danger" (click)="deleteAlbum(album.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChanged)="loadAlbums($event)"></app-pagination>
