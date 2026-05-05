@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PhotoGallery.Core.Application.DTOs.Images;
 using PhotoGallery.Core.Application.Interfaces;
+using PhotoGallery.Core.Application.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -38,6 +39,32 @@ namespace PhotoGallery.API.Controllers
             {
                 return BadRequest(ex);
             }
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPost("{id}/like")]
+        public async Task<IActionResult> Like(Guid id)
+        {
+            var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var success = await imageService.LikeAsync(id, userId!);
+
+            if (!success)
+                return NotFound();
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPost("{id}/dislike")]
+        public async Task<IActionResult> Dislike(Guid id)
+        {
+            var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var success = await imageService.DislikeAsync(id, userId!);
+
+            if (!success)
+                return NotFound();
 
             return Ok();
         }

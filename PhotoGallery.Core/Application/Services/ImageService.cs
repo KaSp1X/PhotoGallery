@@ -72,6 +72,84 @@ namespace PhotoGallery.Core.Application.Services
             return true;
         }
 
+        public async Task<bool> LikeAsync(Guid imageId, string currentUserId)
+        {
+            var image = await context.Images.Include(i => i.Album).FirstOrDefaultAsync(i => i.Id == imageId);
+
+            if (image == null)
+                return false;
+
+            var existingReaction = await context.ImageReactions.FirstOrDefaultAsync(r => r.ImageId == imageId && r.UserId == currentUserId);
+
+            if (existingReaction?.IsLike == true)
+            {
+                context.ImageReactions.Remove(existingReaction);
+                image.Likes = Math.Max(0, image.Likes - 1);
+            }
+            else if (existingReaction?.IsLike == false)
+            {
+                image.Dislikes = Math.Max(0, image.Dislikes - 1);
+                existingReaction.IsLike = true;
+                image.Likes++;
+            }
+            else
+            {
+                var reaction = new ImageReaction
+                {
+                    Id = Guid.NewGuid(),
+                    ImageId = imageId,
+                    UserId = currentUserId,
+                    IsLike = true
+                };
+
+                await context.ImageReactions.AddAsync(reaction);
+                image.Likes++;
+            }
+
+            await context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DislikeAsync(Guid imageId, string currentUserId)
+        {
+            var image = await context.Images.Include(i => i.Album).FirstOrDefaultAsync(i => i.Id == imageId);
+
+            if (image == null)
+                return false;
+
+            var existingReaction = await context.ImageReactions.FirstOrDefaultAsync(r => r.ImageId == imageId && r.UserId == currentUserId);
+
+            if (existingReaction?.IsLike == false)
+            {
+                context.ImageReactions.Remove(existingReaction);
+                image.Dislikes = Math.Max(0, image.Dislikes - 1);
+            }
+            else if (existingReaction?.IsLike == true)
+            {
+                image.Likes = Math.Max(0, image.Likes - 1);
+                existingReaction.IsLike = false;
+                image.Dislikes++;
+            }
+            else
+            {
+                var reaction = new ImageReaction
+                {
+                    Id = Guid.NewGuid(),
+                    ImageId = imageId,
+                    UserId = currentUserId,
+                    IsLike = false
+                };
+
+                await context.ImageReactions.AddAsync(reaction);
+                image.Dislikes++;
+            }
+
+            await context.SaveChangesAsync();
+
+            return true;
+        }
+
         private static ImageDto MapImage(Image image) => new()
         {
             Id = image.Id,
