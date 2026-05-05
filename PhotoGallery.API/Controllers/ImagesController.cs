@@ -25,7 +25,19 @@ namespace PhotoGallery.API.Controllers
         {
             var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
             var isAdmin = User.IsInRole("Admin");
-            await imageService.UploadAsync(dto, userId!, isAdmin);
+
+            try
+            {
+                await imageService.UploadAsync(dto, userId!, isAdmin);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
 
             return Ok();
         }
