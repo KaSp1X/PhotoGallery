@@ -24,4 +24,9 @@
     <ProjectReference Include="..\PhotoGallery.Core\PhotoGallery.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\full\" />
+    <Folder Include="wwwroot\uploads\thumbnails\" />
+  </ItemGroup>
+
 </Project>

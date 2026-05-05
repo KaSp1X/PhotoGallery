@@ -7,7 +7,7 @@ using PhotoGallery.Core.Infrastructure;
 
 namespace PhotoGallery.Core.Application.Services
 {
-    public class AlbumService(AppDbContext context) : IAlbumService
+    public class AlbumService(AppDbContext context, IFileService fileService) : IAlbumService
     {
         private const int PageSize = 5;
 
@@ -79,6 +79,11 @@ namespace PhotoGallery.Core.Application.Services
 
             if (!isOwner && !isAdmin)
                 return false;
+
+            foreach (var image in album.Images)
+            {
+                fileService.DeleteImage(image.ImagePath, image.ThumbnailPath);
+            }
 
             context.Albums.Remove(album);
             await context.SaveChangesAsync();
