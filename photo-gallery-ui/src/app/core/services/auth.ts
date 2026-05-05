@@ -11,11 +11,13 @@ import { AuthResponse } from '../../shared/models/auth-response.model';
 })
 export class Auth {
   private readonly tokenKey = 'token';
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
+  private readonly isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
 
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {
+    this.isAuthenticatedSubject.next(this.hasToken());
+  }
 
   login(data: any): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, data);
@@ -51,7 +53,7 @@ export class Auth {
     const decoded: any = jwtDecode(token);
     const roles = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
 
-    if (!roles)  return [];
+    if (!roles) return [];
 
     return Array.isArray(roles) ? roles : [roles];
   }
